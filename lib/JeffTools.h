@@ -35,6 +35,11 @@ usuario usuarios[25] = // Usuarios por defecto
         {101615, "Martin", "martinelCrack", "martin@outlook.com", " Chile ", "Republica", "487432151", "5465151515", 41.1},
         {787878, "ALANIS", "Constrasenia5", "email5@try.com", "Estados Unidos", "New York", "984521385", "1651245515", 50.00}};
 
+/**********************************************************************************************************************
+                                                M A R K E T I N G
+**********************************************************************************************************************/
+// COLORES Y ASPECTO VISUAL
+
 void inicioAnimacion()
 {
     char lineas[94] = "----------------------------------------------------------------------------------------------";
@@ -146,8 +151,29 @@ void HEADER()
     printf("\t\tS I M U L A T I O N  -  I N T E R N A T I O N A L  -  B A N K \n");
     printf(" --------------------------------------------------------------------------------------------\n");
 }
-/**********************************************************************************************************************
-                                                M A R K E T I N G
-**********************************************************************************************************************/
 
-// COLORES Y ASPECTO VISUAL
+const int LONGITUD_BARR = 30;
+// PROGRESS BAR ROTATE
+// Iterera caracteres y se queda con el último caracter, es ADAPTABLE a cualquier medida
+void showBarrRotate(int delay)
+{
+    char caracteres[] = "|/-\\T";           // valores iterar
+    char barr[LONGITUD_BARR];               // barra estatica
+    for (int i = 0; i < LONGITUD_BARR; i++) // Coloca espacios vacios para ser iterable
+    {
+        barr[i] = ' ';
+    }
+
+    for (int i = 0; i < LONGITUD_BARR; i++)
+    {
+        int porcentaje = (i * 100) / (LONGITUD_BARR - 1); // porcentaje/iteración
+        for (int x = 0; x <= 4; x++)                      // iterar misma posicion  -  guardar útlimo
+        {
+            barr[i] = caracteres[(x % 5)];
+            printf("\r %s %d%% Complete..!", barr, porcentaje);
+            usleep(450 * delay);
+        }
+    }
+    fflush(stdout); // Limpia la memoria
+    printf("\n");
+}

@@ -5,11 +5,11 @@
 #include <conio.h>
 #include "../lib/JeffTools.h"
 
-/******************************************************
+/**************************************************************
 Date       : 17.jun.2022
-Developer  : Chileno Jefferson - Narváez Jhoel - Palma Darío
+Developer's  : Chileno Jefferson - Narváez Jhoel - Palma Darío
 Subject    : Simulation Bank
-*******************************************************/
+**************************************************************/
 
 const int DELAY = 1000; // Tiempo de espera
 char EnterOrExit;
@@ -29,42 +29,36 @@ void searchPositionFree()
 // CREAR NUEVO USUARIO
 void createNewUser()
 {
-    HEADER();
-    searchPositionFree(); // ESPACIO PARA NUEVO USUARIO
-    // NEW USER
-    // do
-    // {
-    printf("soy la posicion %d y estoy vacia", positionUserFree); // revisar la posición vacia
-    // printf("\nCARGANDO REGISTRO...POR FAVOR ESPERE\n");
-    // showBarrRotate(3);
+    searchPositionFree();                                            // ESPACIO PARA NUEVO USUARIO
+    printf("\n soy la posicion %d y estoy vacia", positionUserFree); // revisar la posición vacia
 
     // GUARDAMOS EL NOMBRE
     fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
     printf("\n COMPLETE LOS SIGUIENTES CAMPOS - COMPLETE THE FOLLOWING FIELDS\n");
-    printf("\n Nombre - Name:\t\t");
+    printf("\n Nombre - Name:\t\t\t");
     scanf("%s", &usuarios[positionUserFree].user);
     // GUARDAMOS LA CONSTRASEÑA
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
+    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a contraseña, salta a email
     printf(" Contrasena - Password:\t\t");
     scanf("%s", &usuarios[positionUserFree].password);
     // GUARDAMOS EMAIL
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
+    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a email, salta a country
     printf(" Correo - Email:\t\t");
     scanf("%s", &usuarios[positionUserFree].email);
     // GUARDAMOS PAIS
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
+    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a country, salta a city
     printf(" Pais - Country:\t\t");
     scanf("%s", &usuarios[positionUserFree].county);
     // GUARDAMOS CIUDAD
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
-    printf(" Ciudad - City:\t\t");
+    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a city, salta a phoneNumber
+    printf(" Ciudad - City:\t\t\t");
     scanf("%s", &usuarios[positionUserFree].city);
     // GUARDAMOS TELEFONO
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
-    printf(" Telefono - Phone number:\t\t0");
+    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a phoneNumber, salta a IdentificationCard
+    printf(" Telefono - Phone number:\t0");
     scanf("%s", &usuarios[positionUserFree].phoneNumber);
     // GUARDAMOS IDENTIFICACION
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
+    fflush(stdin); // LIMPIA EL BUFFER - RAM
     printf(" Pasaporte - Passport:\t\t");
     scanf("%s", &usuarios[positionUserFree].identificationCard);
     // ASIGNAR UN ID UNICO
@@ -98,7 +92,7 @@ void searchUser()
     printf("\n Por favor, ingrese el ID para buscarlo en la base de datos: ");
     scanf("%i", &searchID);
     printf(" BUSCANDO...POR FAVOR ESPERE\n");
-    // showBarrRotate(3);
+    showBarrRotate(3);
     for (int i = 0; i < 100; i++)
         if (searchID == usuarios[i].ID)
         {
@@ -188,10 +182,16 @@ void main()
         if (EnterOrExit == '2') // CREAR CUENTA
         {
             system("cls");
+            HEADER();
+            printf("\n CARGANDO REGISTRO... \n\n");
+            showBarrRotate(3);
+            system("cls");
+            HEADER();
             createNewUser();
-            printf("\n\n Confirmacion de Registro de Cuenta: \n"
-                   " Presione '0' para confirmar \n"
-                   " Presione cualquier tecla para salir: ");
+            printf("\n\n CONFIRMACION DE REGISTRO DE CUENTA \n\n"
+                   " 0. confirmar \n"
+                   " 1. Salir\n\n\n\n\n\n"
+                   "\t\t\t\tIngrese una opcion: ");
             fflush(stdin);
             scanf("%s", &EnterOrExit);
 
@@ -199,48 +199,46 @@ void main()
             {
                 system("cls");
                 HEADER();
-                printf("\n VALIDANDO DATOS...\n");
-                // showBarrRotate(30);
+                printf("\n VALIDANDO DATOS...\n\n");
+                showBarrRotate(30);
 
                 system("cls");
                 HEADER();
-                printf(" soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
+                printf("\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
                 printf("\n REGISTRO COMPLETO\n");
                 printf("\n Resumen breve\n");
                 printf("\n Codigo Unico:\t\t%-d", usuarios[positionUserFree].ID);
                 printf("\n Nombre:\t\t%-s", usuarios[positionUserFree].user);
                 printf("\n Correo:\t\t%-s", usuarios[positionUserFree].email);
 
-                printf("\n\n Nota: Guardar su user ID (codigo unico).\n Porque todas las transacciones se realizaran con este codigo\n");
+                printf("\n\n Nota: Guardar su user ID (codigo unico).\n Porque todas las transacciones se realizaran con este codigo\n\n\n\n\n\n\n\n\n\n\n\n\n"
+                       "\t\t\t\tPresione 0 para continuar ");
                 // GUARDAR EN FICHEROS
-                FILE *fichero = fopen("baseDeDatos.md", "a"); // busca/crear archivo +baseDeDatos.txt+
+                FILE *fichero = fopen("usuarios.txt", "a"); // busca/crear archivo +baseDeDatos.txt+
                 if ((fichero) == NULL)
                     perror("No se ha posido establecer conexion con el archivo"); // informa si hay errores con PERROR y MUESTRA CUAL ES EL PROBLE EN ESPECIFICO
 
-                else
-                {
-                    // fprintf(fichero, " \nESTADO DE CUENTA\n\n"
-                    //                  " Codigo Unico / ID:\t\t%-d\n"
-                    //                  " Usuario / User:\t\t%-s\n"
-                    //                  " Correo / Email:\t\t%-s\n"
-                    //                  " Identificacion:\t\t%-s\n"
-                    //                  " Pais / Country:\t\t%-s\n"
-                    //                  " Ciudad / City:\t\t\t%-s\n"
-                    //                  " Telefono / Phone:\t\t0%-s\n"
-                    //                  " Saldo / Balance:\t\t$ %-.2f\n\n\n",
-                    //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].email, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].cash);
+                fprintf(fichero, " \nESTADO DE CUENTA\n\n"
+                                 " Codigo Unico / ID:\t\t%-d\n"
+                                 " Usuario / User:\t\t%-s\n"
+                                 " Correo / Email:\t\t%-s\n"
+                                 " Identificacion:\t\t%-s\n"
+                                 " Pais / Country:\t\t%-s\n"
+                                 " Ciudad / City:\t\t\t%-s\n"
+                                 " Telefono / Phone:\t\t0%-s\n"
+                                 " Saldo / Balance:\t\t$ %-.2f\n\n\n",
+                        usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].email, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].cash);
 
-                    // fprintf(fichero, "\n\n {%d,"
-                    //                  "%s"
-                    //                  ",%s"
-                    //                  ",%s"
-                    //                  ",%s"
-                    //                  ",%s"
-                    //                  ",%s"
-                    //                  ",%s"
-                    //                  ",%.2f}",
-                    //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].password, usuarios[positionUserFree].email, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].cash);
-                }
+                // fprintf(fichero, "\n\n {%d,"
+                //                  "%s"
+                //                  ",%s"
+                //                  ",%s"
+                //                  ",%s"
+                //                  ",%s"
+                //                  ",%s"
+                //                  ",%s"
+                //                  ",%.2f}",
+                //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].password, usuarios[positionUserFree].email, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].cash);
 
                 fflush(fichero); // LIMPIAR FICHERO Y RAM
                 fclose(fichero); // CERRAR EL FICHERO
@@ -254,7 +252,6 @@ void main()
 
     } while (EnterOrExit != '0');
 
-    // getch();
     // CONSULTA TODOS LOS USUARIOS
 
     // fflush(stdin);
@@ -276,4 +273,5 @@ void main()
     //            usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
     //     printf("-------------------------------------------------------------------------------\n");
     // }
+    // getch();
 }
