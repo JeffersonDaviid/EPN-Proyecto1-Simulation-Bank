@@ -268,8 +268,8 @@ void main()
                " Identificacion:\t\t%-s\n"
                " Pais / Country:\t\t%-s\n"
                " Ciudad / City:\t\t\t%-s\n"
-               " Telefono / Phone:\t\t0%-s\n"
-               " Saldo / Balance:\t\t$ %-.2f\n",
+               " Telefono / Phones:\t\t0%-s\n"
+               " Saldo / Balances:\t\t$ %-.2f\n",
                usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
         printf("-------------------------------------------------------------------------------\n");
     }
