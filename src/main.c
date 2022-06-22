@@ -9,7 +9,7 @@
 Date       : 17.jun.2022
 Developer's  : Chileno Jefferson - Narváez Jhoel - Palma Darío
 Subject    : Simulation Bank
-**************************************************************/
+***************************************************************/
 
 const int DELAY = 1000; // Tiempo de espera
 char EnterOrExit;
