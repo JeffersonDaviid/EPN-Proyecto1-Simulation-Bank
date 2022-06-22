@@ -254,24 +254,24 @@ void main()
 
     // CONSULTA TODOS LOS USUARIOS
 
-    // fflush(stdin);
-    // HEADER();
-    // searchPositionFree();
-    // fflush(stdin);
-    // for (int i = 0; i <= positionUserFree; i++)
-    // {
-    //     // printf(" %d\t\t%s\t\t$%.2f\n", usuarios[i].ID, usuarios[i].user, usuarios[i].cash);
-    //     printf(" ESTADO DE CUENTA\n\n"
-    //            " Codigo Unico / ID:\t\t%-d\n"
-    //            " Usuario / User:\t\t%-s\n"
-    //            " Correo / Email:\t\t%-s\n"
-    //            " Identificacion:\t\t%-s\n"
-    //            " Pais / Country:\t\t%-s\n"
-    //            " Ciudad / City:\t\t\t%-s\n"
-    //            " Telefono / Phone:\t\t0%-s\n"
-    //            " Saldo / Balance:\t\t$ %-.2f\n",
-    //            usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
-    //     printf("-------------------------------------------------------------------------------\n");
-    // }
-    // getch();
+    fflush(stdin);
+    HEADER();
+    searchPositionFree();
+    fflush(stdin);
+    for (int i = 0; i <= positionUserFree; i++)
+    {
+        // printf(" %d\t\t%s\t\t$%.2f\n", usuarios[i].ID, usuarios[i].user, usuarios[i].cash);
+        printf(" ESTADO DE CUENTA\n\n"
+               " Codigo Unico / ID:\t\t%-d\n"
+               " Usuario / User:\t\t%-s\n"
+               " Correo / Email:\t\t%-s\n"
+               " Identificacion:\t\t%-s\n"
+               " Pais / Country:\t\t%-s\n"
+               " Ciudad / City:\t\t\t%-s\n"
+               " Telefono / Phone:\t\t0%-s\n"
+               " Saldo / Balance:\t\t$ %-.2f\n",
+               usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
+        printf("-------------------------------------------------------------------------------\n");
+    }
+    getch();
 }
