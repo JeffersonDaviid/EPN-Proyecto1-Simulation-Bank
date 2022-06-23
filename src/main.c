@@ -6,9 +6,9 @@
 #include "../lib/JeffTools.h"
 
 /**************************************************************
-Date       : 17.jun.2022
+Date         : 17.jun.2022
 Developer's  : Chileno Jefferson - Narváez Jhoel - Palma Darío
-Subject    : Simulation Bank
+Subject      : Simulation Bank
 **************************************************************/
 
 const int DELAY = 1000; // Tiempo de espera
@@ -80,13 +80,12 @@ void createNewUser()
 }
 
 // BUSCAR USUARIO EN BASE DE DATOS <jeffTool.h>
-void searchUser()
+int searchUser()
 {
     int searchID;              // guardaremos lo que ingrese por consola
     bool flagFindUser = false; // ayuda para indicar que se ha encontrado el usuario solicitado
     flagFindUser = false;      // reiniciar para buscar en cada iteracion
-    // do
-    // {
+
     system("cls");
     HEADER();
     printf("\n Por favor, ingrese el ID para buscarlo en la base de datos: ");
@@ -96,30 +95,18 @@ void searchUser()
     for (int i = 0; i < 100; i++)
         if (searchID == usuarios[i].ID)
         {
-            system("cls");
-            HEADER();
-            printf(" \nESTADO DE CUENTA\n\n"
-                   " Codigo Unico / ID:\t\t%-d\n"
-                   " Usuario / User:\t\t%-s\n"
-                   " Correo / Email:\t\t%-s\n"
-                   " Identificacion:\t\t%-s\n"
-                   " Pais / Country:\t\t%-s\n"
-                   " Ciudad / City:\t\t\t%-s\n"
-                   " Telefono / Phone:\t\t0%-s\n"
-                   " Saldo / Balance:\t\t$ %-.2f\n",
-                   usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
-            printf("-------------------------------------------------------------------------------\n");
             flagFindUser = true; // Encontre user
-            break;
+            return searchID;
         }
 
     if (flagFindUser != true)
     {
-        system("cls");
-        HEADER();
-        printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
-               " Revise e intentelo nuevamente.\n\n",
-               searchID);
+        return 1000;
+        // system("cls");
+        // HEADER();
+        // printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
+        //        " Revise e intentelo nuevamente.\n\n",
+        //        searchID);
     }
 }
 
