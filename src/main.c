@@ -6,9 +6,9 @@
 #include "../lib/JeffTools.h"
 
 /**************************************************************
-Date       : 17.jun.2022
+Date         : 17.jun.2022
 Developer's  : Chileno Jefferson - Narváez Jhoel - Palma Darío
-Subject    : Simulation Bank
+Subject      : Simulation Bank
 **************************************************************/
 
 const int DELAY = 1000; // Tiempo de espera
@@ -80,13 +80,12 @@ void createNewUser()
 }
 
 // BUSCAR USUARIO EN BASE DE DATOS <jeffTool.h>
-void searchUser()
+int searchUser()
 {
     int searchID;              // guardaremos lo que ingrese por consola
     bool flagFindUser = false; // ayuda para indicar que se ha encontrado el usuario solicitado
     flagFindUser = false;      // reiniciar para buscar en cada iteracion
-    // do
-    // {
+
     system("cls");
     HEADER();
     printf("\n Por favor, ingrese el ID para buscarlo en la base de datos: ");
@@ -96,33 +95,22 @@ void searchUser()
     for (int i = 0; i < 100; i++)
         if (searchID == usuarios[i].ID)
         {
-            system("cls");
-            HEADER();
-            printf(" \nESTADO DE CUENTA\n\n"
-                   " Codigo Unico / ID:\t\t%-d\n"
-                   " Usuario / User:\t\t%-s\n"
-                   " Correo / Email:\t\t%-s\n"
-                   " Identificacion:\t\t%-s\n"
-                   " Pais / Country:\t\t%-s\n"
-                   " Ciudad / City:\t\t\t%-s\n"
-                   " Telefono / Phone:\t\t0%-s\n"
-                   " Saldo / Balance:\t\t$ %-.2f\n",
-                   usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
-            printf("-------------------------------------------------------------------------------\n");
             flagFindUser = true; // Encontre user
-            break;
+            return searchID;
         }
 
     if (flagFindUser != true)
     {
-        system("cls");
-        HEADER();
-        printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
-               " Revise e intentelo nuevamente.\n\n",
-               searchID);
+        return -1;
+        // system("cls");
+        // HEADER();
+        // printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
+        //        " Revise e intentelo nuevamente.\n\n",
+        //        searchID);
     }
 }
 
+int userPosition;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rutina Principal
 void main()
@@ -138,6 +126,8 @@ void main()
 
         if (EnterOrExit == '1') // INCIAR SESION
         {
+            HEADER();
+            printf(" Inicio / Iniciar Sesion\n");
 
             // JHOELLLLLLLL
             // primero necesitas buscar el Id, elabora algo para obtener ese ID
@@ -148,6 +138,7 @@ void main()
                 {
                     system("cls");
                     HEADER();
+                    printf(" Inicio / Operaciones\n");
                     printf("\n\t\t\t\tW E L C O M E   B A C K:\n");
                     printf("\n Lista de opciones\n"
                            "\n 1. Realizar Desposito"
@@ -164,17 +155,16 @@ void main()
                     {
                     case 1:
                         // int positionUserFree; // ID POR PARTE DE JHOEL
-
-                        int deposito;
+                        // searchUser();
+                        // int deposito;
                         system("cls");
                         HEADER();
-                        printf("\n REALIZAR DEPOSITO\n");
-                        printf(" -----------------\n\n");
+                        printf(" Usuario / Inicio / Deposito\n");
 
-                        printf(" dinero a ingresar: \n");
+                        printf("\n Dinero a ingresar:\t$ ");
                         scanf("%f", &deposito);
-                        usuarios[5].cash += deposito;
-                        printf("dinero $%.2f", usuarios[5].cash);
+                        usuarios[searchUser()].cash += deposito;
+                        printf("Su saldo actual es: $ %-.2f", usuarios[searchUser()].cash);
                         printf("\n El deposito se realizo correctamente.\n");
                         getch();
                         break;
@@ -201,6 +191,7 @@ void main()
             showBarrRotate(3);
             system("cls");
             HEADER();
+            printf(" Inicio / Crear usuario\n");
             createNewUser();
             printf("\n\n CONFIRMACION DE REGISTRO DE CUENTA \n\n"
                    " 0. confirmar \n"
@@ -219,6 +210,7 @@ void main()
                 system("cls");
                 HEADER();
                 printf("\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
+                printf(" Inicio / Crear Usuario / Resumen\n");
                 printf("\n REGISTRO COMPLETO\n");
                 printf("\n Resumen breve\n");
                 printf("\n Codigo Unico:\t\t%-d", usuarios[positionUserFree].ID);
