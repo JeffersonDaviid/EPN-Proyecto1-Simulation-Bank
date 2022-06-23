@@ -158,23 +158,25 @@ void main()
                     printf("\n\n Ingrese una opcion: ");
                     scanf("%s", &EnterOrExit);
                     int Option = EnterOrExit - '0'; // CHAR TO INT
+                    float deposito;
                     // int Option = atoi(EnterOrExit); // CHAR TO INT - DON'T WORK
                     switch (Option)
                     {
                     case 1:
                         // int positionUserFree; // ID POR PARTE DE JHOEL
 
-                        float deposito;
+                        int deposito;
                         system("cls");
                         HEADER();
                         printf("\n REALIZAR DEPOSITO\n");
                         printf(" -----------------\n\n");
 
-                        printf("dinero a ingresar: \n");
+                        printf(" dinero a ingresar: \n");
                         scanf("%f", &deposito);
                         usuarios[5].cash += deposito;
                         printf("dinero $%.2f", usuarios[5].cash);
                         printf("\n El deposito se realizo correctamente.\n");
+                        getch();
                         break;
                     case 2:
 
