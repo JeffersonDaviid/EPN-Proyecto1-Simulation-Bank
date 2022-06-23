@@ -110,6 +110,7 @@ int searchUser()
     }
 }
 
+int userPosition;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rutina Principal
 void main()
@@ -125,6 +126,8 @@ void main()
 
         if (EnterOrExit == '1') // INCIAR SESION
         {
+            HEADER();
+            printf(" Inicio / Iniciar Sesion\n");
 
             // JHOELLLLLLLL
             // primero necesitas buscar el Id, elabora algo para obtener ese ID
@@ -135,6 +138,7 @@ void main()
                 {
                     system("cls");
                     HEADER();
+                    printf(" Inicio / Operaciones\n");
                     printf("\n\t\t\t\tW E L C O M E   B A C K:\n");
                     printf("\n Lista de opciones\n"
                            "\n 1. Realizar Desposito"
@@ -151,17 +155,16 @@ void main()
                     {
                     case 1:
                         // int positionUserFree; // ID POR PARTE DE JHOEL
-
-                        int deposito;
+                        // searchUser();
+                        // int deposito;
                         system("cls");
                         HEADER();
-                        printf("\n REALIZAR DEPOSITO\n");
-                        printf(" -----------------\n\n");
+                        printf(" Usuario / Inicio / Deposito\n");
 
-                        printf(" dinero a ingresar: \n");
+                        printf("\n Dinero a ingresar:\t$ ");
                         scanf("%f", &deposito);
-                        usuarios[5].cash += deposito;
-                        printf("dinero $%.2f", usuarios[5].cash);
+                        usuarios[searchUser()].cash += deposito;
+                        printf("Su saldo actual es: $ %-.2f", usuarios[searchUser()].cash);
                         printf("\n El deposito se realizo correctamente.\n");
                         getch();
                         break;
@@ -188,6 +191,7 @@ void main()
             showBarrRotate(3);
             system("cls");
             HEADER();
+            printf(" Inicio / Crear usuario\n");
             createNewUser();
             printf("\n\n CONFIRMACION DE REGISTRO DE CUENTA \n\n"
                    " 0. confirmar \n"
@@ -206,6 +210,7 @@ void main()
                 system("cls");
                 HEADER();
                 printf("\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
+                printf(" Inicio / Crear Usuario / Resumen\n");
                 printf("\n REGISTRO COMPLETO\n");
                 printf("\n Resumen breve\n");
                 printf("\n Codigo Unico:\t\t%-d", usuarios[positionUserFree].ID);
