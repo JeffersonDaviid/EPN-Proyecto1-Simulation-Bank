@@ -79,8 +79,9 @@ void createNewUser()
     // d  (a   a)  a→ d  →→→  d (a != d) → unico  PERO  d == d
 }
 
+int temporal;
 // BUSCAR USUARIO EN BASE DE DATOS <jeffTool.h>
-int searchUser()
+void searchUser()
 {
     int searchID;              // guardaremos lo que ingrese por consola
     bool flagFindUser = false; // ayuda para indicar que se ha encontrado el usuario solicitado
@@ -96,12 +97,14 @@ int searchUser()
         if (searchID == usuarios[i].ID)
         {
             flagFindUser = true; // Encontre user
-            return searchID;
+            printf("el valor del ID es %d", searchID);
+            getch();
+            temporal = searchID;
         }
 
     if (flagFindUser != true)
     {
-        return -1;
+        temporal = -1;
         // system("cls");
         // HEADER();
         // printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
@@ -110,6 +113,20 @@ int searchUser()
     }
 }
 
+// BUSCA LA POSICION DEL USUARIO EN LA ESTRUCTURA EN BASE DE DATOS
+int userPosition()
+{
+    for (int i = 0; i < 100; i++) // buscara todos los usuarios
+    {
+        if (temporal == usuarios[i].ID) // cuando encuentre el usuario con el ID recibido de INR SEARCHUSER()
+        {
+            printf("el posicion de %d es %d", temporal, i);
+            getch();
+            // temporal2 = i;
+            return i; // Devuelve la posicion de el ID en la estructura
+        }
+    }
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rutina Principal
 void main()
@@ -126,6 +143,8 @@ void main()
         if (EnterOrExit == '1') // INCIAR SESION
         {
 
+            searchUser();
+            userPosition();
             // JHOELLLLLLLL
             // primero necesitas buscar el Id, elabora algo para obtener ese ID
 
@@ -135,7 +154,7 @@ void main()
                 {
                     system("cls");
                     HEADER();
-                    printf("\n\t\t\t\tW E L C O M E   B A C K:\n");
+                    printf("\n\t\t\t\tW E L C O M E   B A C K, %s\n", usuarios[userPosition()].user);
                     printf("\n Lista de opciones\n"
                            "\n 1. Realizar Desposito"
                            "\n 2. Realizar Trasaccion"
@@ -152,7 +171,6 @@ void main()
                     case 1:
                         // int positionUserFree; // ID POR PARTE DE JHOEL
 
-                        int deposito;
                         system("cls");
                         HEADER();
                         printf("\n REALIZAR DEPOSITO\n");
@@ -160,8 +178,8 @@ void main()
 
                         printf(" dinero a ingresar: \n");
                         scanf("%f", &deposito);
-                        usuarios[5].cash += deposito;
-                        printf("dinero $%.2f", usuarios[5].cash);
+                        usuarios[userPosition()].cash += deposito;
+                        printf("dinero $%.2f", usuarios[userPosition()].cash);
                         printf("\n El deposito se realizo correctamente.\n");
                         getch();
                         break;
