@@ -162,7 +162,19 @@ void main()
                     switch (Option)
                     {
                     case 1:
-                        // DARÍOOOOOO
+                        // int positionUserFree; // ID POR PARTE DE JHOEL
+
+                        float deposito;
+                        system("cls");
+                        HEADER();
+                        printf("\n REALIZAR DEPOSITO\n");
+                        printf(" -----------------\n\n");
+
+                        printf("dinero a ingresar: \n");
+                        scanf("%f", &deposito);
+                        usuarios[5].cash += deposito;
+                        printf("dinero $%.2f", usuarios[5].cash);
+                        printf("\n El deposito se realizo correctamente.\n");
                         break;
                     case 2:
 
