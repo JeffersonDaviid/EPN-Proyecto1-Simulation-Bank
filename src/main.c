@@ -6,9 +6,9 @@
 #include "../lib/JeffTools.h"
 
 /**************************************************************
-Date       : 17.jun.2022
+Date         : 17.jun.2022
 Developer's  : Chileno Jefferson - Narváez Jhoel - Palma Darío
-Subject    : Simulation Bank
+Subject      : Simulation Bank
 **************************************************************/
 
 const int DELAY = 1000; // Tiempo de espera
@@ -79,14 +79,14 @@ void createNewUser()
     // d  (a   a)  a→ d  →→→  d (a != d) → unico  PERO  d == d
 }
 
+int temporal;
 // BUSCAR USUARIO EN BASE DE DATOS <jeffTool.h>
 void searchUser()
 {
     int searchID;              // guardaremos lo que ingrese por consola
     bool flagFindUser = false; // ayuda para indicar que se ha encontrado el usuario solicitado
     flagFindUser = false;      // reiniciar para buscar en cada iteracion
-    // do
-    // {
+
     system("cls");
     HEADER();
     printf("\n Por favor, ingrese el ID para buscarlo en la base de datos: ");
@@ -96,33 +96,37 @@ void searchUser()
     for (int i = 0; i < 100; i++)
         if (searchID == usuarios[i].ID)
         {
-            system("cls");
-            HEADER();
-            printf(" \nESTADO DE CUENTA\n\n"
-                   " Codigo Unico / ID:\t\t%-d\n"
-                   " Usuario / User:\t\t%-s\n"
-                   " Correo / Email:\t\t%-s\n"
-                   " Identificacion:\t\t%-s\n"
-                   " Pais / Country:\t\t%-s\n"
-                   " Ciudad / City:\t\t\t%-s\n"
-                   " Telefono / Phone:\t\t0%-s\n"
-                   " Saldo / Balance:\t\t$ %-.2f\n",
-                   usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
-            printf("-------------------------------------------------------------------------------\n");
             flagFindUser = true; // Encontre user
-            break;
+            printf("el valor del ID es %d", searchID);
+            getch();
+            temporal = searchID;
         }
 
     if (flagFindUser != true)
     {
-        system("cls");
-        HEADER();
-        printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
-               " Revise e intentelo nuevamente.\n\n",
-               searchID);
+        temporal = -1;
+        // system("cls");
+        // HEADER();
+        // printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
+        //        " Revise e intentelo nuevamente.\n\n",
+        //        searchID);
     }
 }
 
+// BUSCA LA POSICION DEL USUARIO EN LA ESTRUCTURA EN BASE DE DATOS
+int userPosition()
+{
+    for (int i = 0; i < 100; i++) // buscara todos los usuarios
+    {
+        if (temporal == usuarios[i].ID) // cuando encuentre el usuario con el ID recibido de INR SEARCHUSER()
+        {
+            printf("el posicion de %d es %d", temporal, i);
+            getch();
+            // temporal2 = i;
+            return i; // Devuelve la posicion de el ID en la estructura
+        }
+    }
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rutina Principal
 void main()
@@ -138,7 +142,10 @@ void main()
 
         if (EnterOrExit == '1') // INCIAR SESION
         {
+            HEADER();
+            printf(" Inicio / Iniciar Sesion\n");
 
+            searchUser();
             // JHOELLLLLLLL
             // primero necesitas buscar el Id, elabora algo para obtener ese ID
 
@@ -148,7 +155,8 @@ void main()
                 {
                     system("cls");
                     HEADER();
-                    printf("\n\t\t\t\tW E L C O M E   B A C K:\n");
+                    printf(" Inicio / Operaciones\n");
+                    printf("\n\t\t\t\tW E L C O M E   B A C K, %s\n", usuarios[userPosition()].user);
                     printf("\n Lista de opciones\n"
                            "\n 1. Realizar Desposito"
                            "\n 2. Realizar Trasaccion"
@@ -158,11 +166,21 @@ void main()
                     printf("\n\n Ingrese una opcion: ");
                     scanf("%s", &EnterOrExit);
                     int Option = EnterOrExit - '0'; // CHAR TO INT
+                    float deposito;
                     // int Option = atoi(EnterOrExit); // CHAR TO INT - DON'T WORK
                     switch (Option)
                     {
                     case 1:
-                        // DARÍOOOOOO
+                        system("cls");
+                        HEADER();
+                        printf(" Usuario / Inicio / Deposito\n");
+
+                        printf("\n Dinero a ingresar:\t$ ");
+                        scanf("%f", &deposito);
+                        usuarios[userPosition()].cash += deposito;
+                        printf(" Su saldo actual es: $ %.2f", usuarios[userPosition()].cash);
+                        printf("\n El deposito se realizo correctamente.\n");
+                        getch();
                         break;
                     case 2:
 
@@ -187,6 +205,7 @@ void main()
             showBarrRotate(3);
             system("cls");
             HEADER();
+            printf(" Inicio / Crear usuario\n");
             createNewUser();
             printf("\n\n CONFIRMACION DE REGISTRO DE CUENTA \n\n"
                    " 0. confirmar \n"
@@ -205,6 +224,7 @@ void main()
                 system("cls");
                 HEADER();
                 printf("\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
+                printf(" Inicio / Crear Usuario / Resumen\n");
                 printf("\n REGISTRO COMPLETO\n");
                 printf("\n Resumen breve\n");
                 printf("\n Codigo Unico:\t\t%-d", usuarios[positionUserFree].ID);
@@ -218,27 +238,27 @@ void main()
                 if ((fichero) == NULL)
                     perror("No se ha posido establecer conexion con el archivo"); // informa si hay errores con PERROR y MUESTRA CUAL ES EL PROBLE EN ESPECIFICO
 
-                fprintf(fichero, " \nESTADO DE CUENTA\n\n"
-                                 " Codigo Unico / ID:\t\t%-d\n"
-                                 " Usuario / User:\t\t%-s\n"
-                                 " Correo / Email:\t\t%-s\n"
-                                 " Identificacion:\t\t%-s\n"
-                                 " Pais / Country:\t\t%-s\n"
-                                 " Ciudad / City:\t\t\t%-s\n"
-                                 " Telefono / Phone:\t\t0%-s\n"
-                                 " Saldo / Balance:\t\t$ %-.2f\n\n\n",
-                        usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].email, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].cash);
+                // fprintf(fichero, " \nESTADO DE CUENTA\n\n"
+                //                  " Codigo Unico / ID:\t\t%-d\n"
+                //                  " Usuario / User:\t\t%-s\n"
+                //                  " Correo / Email:\t\t%-s\n"
+                //                  " Identificacion:\t\t%-s\n"
+                //                  " Pais / Country:\t\t%-s\n"
+                //                  " Ciudad / City:\t\t\t%-s\n"
+                //                  " Telefono / Phone:\t\t0%-s\n"
+                //                  " Saldo / Balance:\t\t$ %-.2f\n\n\n",
+                //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].email, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].cash);
 
-                // fprintf(fichero, "\n\n {%d,"
-                //                  "%s"
-                //                  ",%s"
-                //                  ",%s"
-                //                  ",%s"
-                //                  ",%s"
-                //                  ",%s"
-                //                  ",%s"
-                //                  ",%.2f}",
-                //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].password, usuarios[positionUserFree].email, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].cash);
+                fprintf(fichero, "\n\n {%d,"
+                                 "%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%.2f}",
+                        usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].password, usuarios[positionUserFree].email, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].cash);
 
                 fflush(fichero); // LIMPIAR FICHERO Y RAM
                 fclose(fichero); // CERRAR EL FICHERO
@@ -254,26 +274,26 @@ void main()
 
     // CONSULTA TODOS LOS USUARIOS
 
-    // fflush(stdin);
-    // HEADER();
-    // searchPositionFree();
-    // fflush(stdin);
-    // for (int i = 0; i <= positionUserFree; i++)
-    // {
-    //     // printf(" %d\t\t%s\t\t$%.2f\n", usuarios[i].ID, usuarios[i].user, usuarios[i].cash);
-    //     printf(" ESTADO DE CUENTA\n\n"
-    //            " Codigo Unico / ID:\t\t%-d\n"
-    //            " Usuario / User:\t\t%-s\n"
-    //            " Correo / Email:\t\t%-s\n"
-    //            " Identificacion:\t\t%-s\n"
-    //            " Pais / Country:\t\t%-s\n"
-    //            " Ciudad / City:\t\t\t%-s\n"
-    //            " Telefono / Phone:\t\t0%-s\n"
-    //            " Saldo / Balance:\t\t$ %-.2f\n",
-    //            usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
-    //     printf("-------------------------------------------------------------------------------\n");
-    // }
-    // getch();
+    fflush(stdin);
+    HEADER();
+    searchPositionFree();
+    fflush(stdin);
+    for (int i = 0; i <= positionUserFree; i++)
+    {
+        // printf(" %d\t\t%s\t\t$%.2f\n", usuarios[i].ID, usuarios[i].user, usuarios[i].cash);
+        printf(" ESTADO DE CUENTA\n\n"
+               " Codigo Unico / ID:\t\t%-d\n"
+               " Usuario / User:\t\t%-s\n"
+               " Correo / Email:\t\t%-s\n"
+               " Identificacion:\t\t%-s\n"
+               " Pais / Country:\t\t%-s\n"
+               " Ciudad / City:\t\t\t%-s\n"
+               " Telefono / Phone:\t\t0%-s\n"
+               " Saldo / Balance:\t\t$ %-.2f\n",
+               usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
+        printf("-------------------------------------------------------------------------------\n");
+    }
+    getch();
 
-    // APLICACION PRINCIPAL
+    // ESPACIO PARA PRUEBAS
 }
