@@ -230,14 +230,14 @@ void main()
                 //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].email, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].cash);
 
                 fprintf(fichero, "\n\n {%d,"
-                                 " %s"
-                                 " ,%s"
-                                 " ,%s"
-                                 " ,%s"
-                                 " ,%s"
-                                 " ,%s"
-                                 " ,%s"
-                                 " ,%.2f}",
+                                 "%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%s"
+                                 ",%.2f}",
                         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].password, usuarios[positionUserFree].email, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].cash);
 
                 fflush(fichero); // LIMPIAR FICHERO Y RAM
