@@ -101,7 +101,7 @@ int searchUser()
 
     if (flagFindUser != true)
     {
-        return 1000;
+        return -1;
         // system("cls");
         // HEADER();
         // printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
