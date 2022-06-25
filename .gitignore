@@ -6,3 +6,5 @@ output/copiar.exe
 baseDeDatos.md
 Makefile
 usuarios.txt
+output
+*.exe
