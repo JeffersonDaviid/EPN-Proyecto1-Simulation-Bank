@@ -29,8 +29,8 @@ void searchPositionFree()
 // CREAR NUEVO USUARIO
 void createNewUser()
 {
-    searchPositionFree();                                            // ESPACIO PARA NUEVO USUARIO
-    printf("\n soy la posicion %d y estoy vacia", positionUserFree); // revisar la posición vacia
+    searchPositionFree(); // ESPACIO PARA NUEVO USUARIO
+    // printf("\n soy la posicion %d y estoy vacia", positionUserFree); // revisar la posición vacia
 
     // GUARDAMOS EL NOMBRE
     fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
@@ -223,7 +223,7 @@ void main()
 
                 system("cls");
                 HEADER();
-                printf("\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
+                // printf("\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
                 printf(" Inicio / Crear Usuario / Resumen\n");
                 printf("\n REGISTRO COMPLETO\n");
                 printf("\n Resumen breve\n");
@@ -237,17 +237,6 @@ void main()
                 FILE *fichero = fopen("usuarios.txt", "a"); // busca/crear archivo +baseDeDatos.txt+
                 if ((fichero) == NULL)
                     perror("No se ha posido establecer conexion con el archivo"); // informa si hay errores con PERROR y MUESTRA CUAL ES EL PROBLE EN ESPECIFICO
-
-                // fprintf(fichero, " \nESTADO DE CUENTA\n\n"
-                //                  " Codigo Unico / ID:\t\t%-d\n"
-                //                  " Usuario / User:\t\t%-s\n"
-                //                  " Correo / Email:\t\t%-s\n"
-                //                  " Identificacion:\t\t%-s\n"
-                //                  " Pais / Country:\t\t%-s\n"
-                //                  " Ciudad / City:\t\t\t%-s\n"
-                //                  " Telefono / Phone:\t\t0%-s\n"
-                //                  " Saldo / Balance:\t\t$ %-.2f\n\n\n",
-                //         usuarios[positionUserFree].ID, usuarios[positionUserFree].user, usuarios[positionUserFree].email, usuarios[positionUserFree].identificationCard, usuarios[positionUserFree].county, usuarios[positionUserFree].city, usuarios[positionUserFree].phoneNumber, usuarios[positionUserFree].cash);
 
                 fprintf(fichero, "\n\n {%d,"
                                  "%s"
@@ -271,29 +260,4 @@ void main()
         }
 
     } while (EnterOrExit != '0');
-
-    // CONSULTA TODOS LOS USUARIOS
-
-    fflush(stdin);
-    HEADER();
-    searchPositionFree();
-    fflush(stdin);
-    for (int i = 0; i <= positionUserFree; i++)
-    {
-        // printf(" %d\t\t%s\t\t$%.2f\n", usuarios[i].ID, usuarios[i].user, usuarios[i].cash);
-        printf(" ESTADO DE CUENTA\n\n"
-               " Codigo Unico / ID:\t\t%-d\n"
-               " Usuario / User:\t\t%-s\n"
-               " Correo / Email:\t\t%-s\n"
-               " Identificacion:\t\t%-s\n"
-               " Pais / Country:\t\t%-s\n"
-               " Ciudad / City:\t\t\t%-s\n"
-               " Telefono / Phone:\t\t0%-s\n"
-               " Saldo / Balance:\t\t$ %-.2f\n",
-               usuarios[i].ID, usuarios[i].user, usuarios[i].email, usuarios[i].identificationCard, usuarios[i].county, usuarios[i].city, usuarios[i].phoneNumber, usuarios[i].cash);
-        printf("-------------------------------------------------------------------------------\n");
-    }
-    getch();
-
-    // ESPACIO PARA PRUEBAS
 }
