@@ -79,54 +79,6 @@ void createNewUser()
     // d  (a   a)  a→ d  →→→  d (a != d) → unico  PERO  d == d
 }
 
-int temporal;
-// BUSCAR USUARIO EN BASE DE DATOS <jeffTool.h>
-void searchUser()
-{
-    int searchID;              // guardaremos lo que ingrese por consola
-    bool flagFindUser = false; // ayuda para indicar que se ha encontrado el usuario solicitado
-    flagFindUser = false;      // reiniciar para buscar en cada iteracion
-
-    system("cls");
-    HEADER();
-    printf("\n Por favor, ingrese el ID para buscarlo en la base de datos: ");
-    scanf("%i", &searchID);
-    printf(" BUSCANDO...POR FAVOR ESPERE\n");
-    showBarrRotate(3);
-    for (int i = 0; i < 100; i++)
-        if (searchID == usuarios[i].ID)
-        {
-            flagFindUser = true; // Encontre user
-            printf("el valor del ID es %d", searchID);
-            getch();
-            temporal = searchID;
-        }
-
-    if (flagFindUser != true)
-    {
-        temporal = -1;
-        // system("cls");
-        // HEADER();
-        // printf("\n\n El usuario '%d' no se encuentra registrado en la base de datos.\n"
-        //        " Revise e intentelo nuevamente.\n\n",
-        //        searchID);
-    }
-}
-
-// BUSCA LA POSICION DEL USUARIO EN LA ESTRUCTURA EN BASE DE DATOS
-int userPosition()
-{
-    for (int i = 0; i < 100; i++) // buscara todos los usuarios
-    {
-        if (temporal == usuarios[i].ID) // cuando encuentre el usuario con el ID recibido de INR SEARCHUSER()
-        {
-            printf("el posicion de %d es %d", temporal, i);
-            getch();
-            // temporal2 = i;
-            return i; // Devuelve la posicion de el ID en la estructura
-        }
-    }
-}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rutina Principal
 void main()
@@ -142,21 +94,55 @@ void main()
 
         if (EnterOrExit == '1') // INCIAR SESION
         {
+        volverIniciar:
+            system("cls");
+
+            int buscarID;
+            char buscarpass[20];
+            int result;
+            int userPosition; // Posicion usuario
+            bool flagSessionSucces = false;
+            flagSessionSucces = false; // reiniciar para buscar en cada iteracion
+
+            system("cls");
             HEADER();
             printf(" Inicio / Iniciar Sesion\n");
+            printf("\n\n\n\n\n\n\n\t\t\t\t USERNAME:     ");
+            scanf("%i", &buscarID);
+            printf("\n\n\t\t\t\t PASSWORD:     ");
+            fflush(stdin);
+            scanf("%s", &buscarpass);
 
-            searchUser();
-            // JHOELLLLLLLL
-            // primero necesitas buscar el Id, elabora algo para obtener ese ID
+            for (int i = 0; i < 25; i++)
+                if (buscarID == usuarios[i].ID)
+                {
+                    userPosition = i;
+                    result = strcmp(usuarios[i].password, buscarpass);
+                    // printf("\n \t\t\t Sale 0 contrasenia correcta = %d", result);
+                    if (result == 0)
+                        flagSessionSucces = true;
+                    break;
+                }
 
-            if (true) // SI ES QUE INICIA SESSION MOSTRAR OPERACIONES
+            if (flagSessionSucces == false)
             {
+                printf("\n\n\n\n\n\t\t\t Usuario o Contrasenia incorrecta ");
+                getch();
+            }
+
+            if (flagSessionSucces == true) // SI ES QUE INICIA SESSION MOSTRAR OPERACIONES
+            {
+                system("cls");
+                HEADER();
+                printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t Iniciando Sesion...\n\n");
+                showBarrRotateCenter(5);
+                system("cls");
                 do
                 {
                     system("cls");
                     HEADER();
                     printf(" Inicio / Operaciones\n");
-                    printf("\n\t\t\t\tW E L C O M E   B A C K, %s\n", usuarios[userPosition()].user);
+                    printf("\n\t\t\t\tW E L C O M E   B A C K, %s\n", usuarios[userPosition].user);
                     printf("\n Lista de opciones\n"
                            "\n 1. Realizar Desposito"
                            "\n 2. Realizar Trasaccion"
@@ -175,11 +161,19 @@ void main()
                         HEADER();
                         printf(" Usuario / Inicio / Deposito\n");
 
-                        printf("\n Dinero a ingresar:\t$ ");
+                        printf("\n Dinero a depositar:\t$ ");
                         scanf("%f", &deposito);
-                        usuarios[userPosition()].cash += deposito;
-                        printf(" Su saldo actual es: $ %.2f", usuarios[userPosition()].cash);
-                        printf("\n El deposito se realizo correctamente.\n");
+                        system("cls");
+                        HEADER();
+                        printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t Terminamos en un momento...\n\n");
+                        showBarrRotateCenter(5);
+                        system("cls");
+                        HEADER();
+                        printf(" Usuario / Inicio / Deposito\n");
+                        printf("\n\n Saldo anterior:\t$ %.2f", usuarios[userPosition].cash);
+                        usuarios[userPosition].cash += deposito;
+                        printf("\n Saldo actual:\t\t$ %-.2f", usuarios[userPosition].cash);
+                        printf("\n\n\n\n\n\t\t\t El deposito se realizo correctamente.\n");
                         getch();
                         break;
                     case 2:
@@ -193,16 +187,14 @@ void main()
                 EnterOrExit = 'a'; // SALIR AL MENU PRINCIPAL
             }
             else
-            {
-                // SI NO INICIA SESION QUE HACE????? JOEELLLLLL
-            }
+                goto volverIniciar; // Volver a iniciar sesion
         }
         if (EnterOrExit == '2') // CREAR CUENTA
         {
             system("cls");
             HEADER();
-            printf("\n CARGANDO REGISTRO... \n\n");
-            showBarrRotate(3);
+            printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t CARGANDO REGISTRO... \n\n");
+            showBarrRotateCenter(3);
             system("cls");
             HEADER();
             printf(" Inicio / Crear usuario\n");
@@ -218,8 +210,8 @@ void main()
             {
                 system("cls");
                 HEADER();
-                printf("\n VALIDANDO DATOS...\n\n");
-                showBarrRotate(30);
+                printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t VALIDANDO DATOS...\n\n");
+                showBarrRotateCenter(30);
 
                 system("cls");
                 HEADER();
