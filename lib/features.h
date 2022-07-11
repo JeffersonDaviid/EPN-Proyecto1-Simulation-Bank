@@ -161,9 +161,7 @@ void showBarrRotateCenter(int delay)
     char caracteres[] = "|/-\\I";           // valores iterar
     char barr[LONGITUD_BARR];               // barra estatica
     for (int i = 0; i < LONGITUD_BARR; i++) // Coloca espacios vacios para ser iterable
-    {
         barr[i] = ' ';
-    }
 
     for (int i = 0; i < LONGITUD_BARR; i++)
     {
