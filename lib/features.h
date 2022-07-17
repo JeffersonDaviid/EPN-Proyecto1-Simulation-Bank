@@ -1,39 +1,64 @@
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <time.h>
 
 const int maxID = 999999;
 const int minID = 100000;
+#define TAB '\t'
+#define ENTER '\n'
 
 /**********************************************************************************************************************
                                                     R O O T S
 **********************************************************************************************************************/
+// con typedef declaramos las variables de estructuras más fácil (tiene más usos)
 
-typedef struct // con typedef declaramos las variables de estructuras más fácil (tiene más usos)
+// struct usuario
+// {
+//     int ID;
+//     string user;
+//     string password;
+//     string email;
+//     string county;
+//     string city;
+//     string phoneNumber;
+//     string identificationCard;
+//     float cash;
+// };
+
+// // USER POR DEFECTO2
+// usuario usuarios[25] = // Usuarios por defecto
+//     {
+//         {121212, "FRANCIS", "Constrasenia1", "email1@try.com", "Ecuador", "Quito", "525568516", "1859354161", 200},
+//         {232323, "JOSE", "Constrasenia2", "email2@try.com", "Ecuador", "Quito", "984521385", "1865255516", 100.00},
+//         {454545, "EMELY", "Constrasenia3", "email3@try.com", "Colombia", "Bogota", "955825681", "7216545354", 50.00},
+//         {565656, "MICA", "Constrasenia4", "email4@try.com", "Ecuador", "Guayaquil", "952568516", "1859354161", 25.30},
+//         {131463, "Aldahir", "constraseña2", "amigos@gmai.com", "Ecuador", "Quito", "985628564", "1958425654", 0.00},
+//         {100282, "Camila", "contrasenia32", "camila32@gmail.com", "Venezuela", "Caracas", "351684596", "8952584651", 35.00},
+//         {100762, "Jefferson", "contrasenia2", "david32@pepe.com", "Japon", "Japon", "855482166", "5255625482", 160.00},
+//         {101625, "Martin", "martinelCrack", "martin@outlook.com", " Chile ", "Republica", "487432161", "5465161616", 30.00},
+//         {787878, "ALANIS", "Contrasenia5", "email5@try.com", "Estados Unidos", "New York", "984521385", "1651255516", 5000.00}};
+
+enum ACCESIBILIDAD
 {
-    int ID;
-    char user[20];
-    char password[20];
-    char email[30];
-    char county[20];
-    char city[20];
-    char phoneNumber[10];
-    char identificationCard[12];
-    float cash;
-} usuario;
+    SALIR = 0,
+    INICIAR_SESION,
+    CREAR_CUENTA
+};
 
-// USER POR DEFECTO
-usuario usuarios[25] = // Usuarios por defecto
-    {
-        {121212, "FRANCIS", "Constrasenia1", "email1@try.com", "Ecuador", "Quito", "525568515", "1759354151", 200},
-        {232323, "JOSE", "Constrasenia2", "email2@try.com", "Ecuador", "Quito", "984521385", "1865245515", 100.00},
-        {454545, "EMELY", "Constrasenia3", "email3@try.com", "Colombia", "Bogota", "945824681", "7216545354", 50.00},
-        {565656, "MICA", "Constrasenia4", "email4@try.com", "Ecuador", "Guayaquil", "952568515", "1759354151", 25.30},
-        {131463, "Aldahir", "constraseña2", "amigos@gmai.com", "Ecuador", "Quito", "985628564", "1958425654", 0.00},
-        {100282, "Camila", "contrasenia32", "camila32@gmail.com", "Venezuela", "Caracas", "351584596", "8952484651", 35.00},
-        {100762, "Jefferson", "contrasenia2", "david32@pepe.com", "Japon", "Japon", "855482156", "5245625482", 150.00},
-        {101615, "Martin", "martinelCrack", "martin@outlook.com", " Chile ", "Republica", "487432151", "5465151515", 30.00},
-        {787878, "ALANIS", "Contrasenia5", "email5@try.com", "Estados Unidos", "New York", "984521385", "1651245515", 5000.00}};
+enum FUNCIONALIDADES
+{
+    DEPOSITAR = 1,
+    TRANSACCION,
+    RETIRAR,
+    ESTADO_CUENTA
+};
+
+enum ACCESORES
+{
+    DENEGAR = 0,
+    ACEPTAR
+};
 
 /**********************************************************************************************************************
                                                 M A R K E T I N G
@@ -41,48 +66,49 @@ usuario usuarios[25] = // Usuarios por defecto
 // COLORES Y ASPECTO VISUAL
 
 void inicioAnimacion()
-{
-    char lineas[94] = "----------------------------------------------------------------------------------------------";
-    char welcome[11] = "WELCOME TO:";
-    char nameBank[61] = "S I M U L A T I O N  -  I N T E R N A T I O N A L  -  B A N K";
-    char createUsssssssser[15] = "2. Crear Cuenta";
-    char iniciarSesssssion[17] = "1. Iniciar Sesion";
-    char salir[8] = "0. SALIR";
 
-    char botonEntrar[24] = "Presione para continuar ";
+{
+    char lineas[95] = "----------------------------------------------------------------------------------------------";
+    char welcome[12] = "WELCOME TO:";
+    char nameBank[62] = "S I M U L A T I O N  -  I N T E R N A T I O N A L  -  B A N K";
+    char createUsssssssser[16] = "2. Crear Cuenta";
+    char iniciarSesssssion[18] = "1. Iniciar Sesion";
+    char salir[9] = "0. SALIR";
+
+    char botonEntrar[25] = "Presione para continuar ";
 
     printf("\n\n\n\n\n\n\n\n\n\n\n");
-    for (int i = 0; i < 94; i++)
+    for (int i = 0; i < 95; i++)
     {
         printf("%c", lineas[i]);
         usleep(1000);
     }
     printf("\n\t");
-    for (int i = 0; i < 11; i++)
+    for (int i = 0; i < 12; i++)
     {
         printf("%c", welcome[i]);
         usleep(3000);
     }
     printf("\n\t\t");
-    for (int i = 0; i < 61; i++)
+    for (int i = 0; i < 62; i++)
     {
         printf("%c", nameBank[i]);
         usleep(3000);
     }
     printf("\n");
-    for (int i = 0; i < 94; i++)
+    for (int i = 0; i < 95; i++)
     {
         printf("%c", lineas[i]);
         usleep(1000);
     }
     printf("\n\n\n\n\n\t");
-    for (int i = 0; i < 17; i++)
+    for (int i = 0; i < 18; i++)
     {
         printf("%c", iniciarSesssssion[i]);
         usleep(1000);
     }
     printf("\n\t");
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 16; i++)
     {
         printf("%c", createUsssssssser[i]);
         usleep(1000);
@@ -95,7 +121,7 @@ void inicioAnimacion()
     }
 
     printf("\n\n\n\n\n\t\t\t\t");
-    for (int i = 0; i < 24; i++)
+    for (int i = 0; i < 25; i++)
     {
         printf("%c", botonEntrar[i]);
         usleep(1000);
@@ -104,43 +130,43 @@ void inicioAnimacion()
 
 void inicio()
 {
-    char lineas[94] = "----------------------------------------------------------------------------------------------";
-    char welcome[11] = "WELCOME TO:";
-    char nameBank[61] = "S I M U L A T I O N  -  I N T E R N A T I O N A L  -  B A N K";
-    char createUsssssssser[15] = "2. Crear Cuenta";
-    char iniciarSesssssion[17] = "1. Iniciar Sesion";
-    char salir[8] = "0. SALIR";
-    char botonEntrar[24] = "Presione para continuar ";
+    char lineas[95] = "----------------------------------------------------------------------------------------------";
+    char welcome[12] = "WELCOME TO:";
+    char nameBank[62] = "S I M U L A T I O N  -  I N T E R N A T I O N A L  -  B A N K";
+    char createUsssssssser[16] = "2. Crear Cuenta";
+    char iniciarSesssssion[18] = "1. Iniciar Sesion";
+    char salir[9] = "0. SALIR";
+    char botonEntrar[25] = "Presione para continuar ";
 
     printf("\n\n\n\n\n\n\n\n\n\n\n");
-    for (int i = 0; i < 94; i++)
+    for (int i = 0; i < 95; i++)
         printf("%c", lineas[i]);
 
     printf("\n\t");
-    for (int i = 0; i < 11; i++)
+    for (int i = 0; i < 12; i++)
         printf("%c", welcome[i]);
 
     printf("\n\t\t");
-    for (int i = 0; i < 61; i++)
+    for (int i = 0; i < 62; i++)
         printf("%c", nameBank[i]);
 
     printf("\n");
-    for (int i = 0; i < 94; i++)
+    for (int i = 0; i < 95; i++)
         printf("%c", lineas[i]);
 
     printf("\n\n\n\n\n\t");
-    for (int i = 0; i < 17; i++)
+    for (int i = 0; i < 18; i++)
         printf("%c", iniciarSesssssion[i]);
 
     printf("\n\t");
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 16; i++)
         printf("%c", createUsssssssser[i]);
     printf("\n\n\t");
     for (int i = 0; i < 8; i++)
         printf("%c", salir[i]);
 
     printf("\n\n\n\n\n\t\t\t\t");
-    for (int i = 0; i < 24; i++)
+    for (int i = 0; i < 25; i++)
         printf("%c", botonEntrar[i]);
 }
 

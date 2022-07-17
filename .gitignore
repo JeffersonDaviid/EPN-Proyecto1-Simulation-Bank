@@ -1,6 +1,6 @@
 src/proximasFuncionalidades.c
 OTROS
-datos.txt
+*.txt
 ideas.md
 output/copiar.exe
 output/main.exe
@@ -9,3 +9,4 @@ Makefile
 usuarios.txt
 output
 *.exe
+.gitignore
