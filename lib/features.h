@@ -11,33 +11,6 @@ const int minID = 100000;
 /**********************************************************************************************************************
                                                     R O O T S
 **********************************************************************************************************************/
-// con typedef declaramos las variables de estructuras más fácil (tiene más usos)
-
-// struct usuario
-// {
-//     int ID;
-//     string user;
-//     string password;
-//     string email;
-//     string county;
-//     string city;
-//     string phoneNumber;
-//     string identificationCard;
-//     float cash;
-// };
-
-// // USER POR DEFECTO2
-// usuario usuarios[25] = // Usuarios por defecto
-//     {
-//         {121212, "FRANCIS", "Constrasenia1", "email1@try.com", "Ecuador", "Quito", "525568516", "1859354161", 200},
-//         {232323, "JOSE", "Constrasenia2", "email2@try.com", "Ecuador", "Quito", "984521385", "1865255516", 100.00},
-//         {454545, "EMELY", "Constrasenia3", "email3@try.com", "Colombia", "Bogota", "955825681", "7216545354", 50.00},
-//         {565656, "MICA", "Constrasenia4", "email4@try.com", "Ecuador", "Guayaquil", "952568516", "1859354161", 25.30},
-//         {131463, "Aldahir", "constraseña2", "amigos@gmai.com", "Ecuador", "Quito", "985628564", "1958425654", 0.00},
-//         {100282, "Camila", "contrasenia32", "camila32@gmail.com", "Venezuela", "Caracas", "351684596", "8952584651", 35.00},
-//         {100762, "Jefferson", "contrasenia2", "david32@pepe.com", "Japon", "Japon", "855482166", "5255625482", 160.00},
-//         {101625, "Martin", "martinelCrack", "martin@outlook.com", " Chile ", "Republica", "487432161", "5465161616", 30.00},
-//         {787878, "ALANIS", "Contrasenia5", "email5@try.com", "Estados Unidos", "New York", "984521385", "1651255516", 5000.00}};
 
 enum ACCESIBILIDAD
 {

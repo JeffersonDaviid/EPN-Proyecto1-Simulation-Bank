@@ -400,7 +400,7 @@ int main()
              << "Ciudad : \t\t" << user.city << endl
              << "Numero de telefono : \t" << user.phoneNumber << endl
              << "Cedula : \t\t" << user.identificationCard << endl
-             << "Dinero : \t\t" << user.cash << endl
+             << "Dinero : \t\t$ " << user.cash << endl
              << endl;
 
     rename(PathdataNEW, Pathdata);
