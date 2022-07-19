@@ -41,31 +41,17 @@ void loadUser()
 
     while (!data.eof())
     {
-        for (int i = 0; i < 9; i++)
-        {
-            struct usuario user;
-            data >> user.ID;
-            i++;
-            data >> user.userName;
-            i++;
-            data >> user.password;
-            i++;
-            data >> user.email;
-            i++;
-            data >> user.county;
-            i++;
-            data >> user.city;
-            i++;
-            data >> user.phoneNumber;
-            i++;
-            data >> user.identificationCard;
-            i++;
-            data >> user.cash;
-            i == 0;
-            // if (user.ID == USERSSSS[USERSSSS.size() - 1].ID)
-            //     break;
-            USERSSSS.push_back(user);
-        }
+        struct usuario user;
+        data >> user.ID;
+        data >> user.userName;
+        data >> user.password;
+        data >> user.email;
+        data >> user.county;
+        data >> user.city;
+        data >> user.phoneNumber;
+        data >> user.identificationCard;
+        data >> user.cash;
+        USERSSSS.push_back(user);
     }
     data.close();
     USERSSSS.pop_back();

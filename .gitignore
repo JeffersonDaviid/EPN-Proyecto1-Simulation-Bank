@@ -10,3 +10,6 @@ usuarios.txt
 output
 *.exe
 .gitignore
+filebinary.cpp
+score
+*.dat
