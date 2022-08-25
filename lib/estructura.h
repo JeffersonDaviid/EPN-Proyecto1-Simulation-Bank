@@ -20,12 +20,13 @@ struct usuario
 {
     int ID;
     char userName[50] = "";
+    char userLastName[50] = "";
     char password[50] = "";
     char email[50] = "";
     char county[25] = "";
     char city[25] = "";
     char phoneNumber[20] = "";
     char identificationCard[20] = "";
-    float cashTotal;
+    float cashTotal = 0;
     struct historial historialUsuario[50];
 };

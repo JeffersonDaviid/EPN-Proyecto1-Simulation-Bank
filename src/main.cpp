@@ -26,7 +26,6 @@ Subject      : Simulation Bank
 const int DELAY = 1000; // Tiempo de espera
 int opcion;
 int positionUserFree; // indica la posicion de usuario
-// char Pathdata[50] = "../output/registros.txt";
 char Pathdata[50] = "registros.txt";
 char PathdataNEW[50] = "registrosNew.txt";
 string PathdataBinary = "registros.dat";
@@ -34,8 +33,135 @@ vector<usuario> lstUsuario;
 vector<string> dia_semana;
 vector<string> mes;
 
-int userRepeat(string dataUser);
+/**
+Convierte todos las letras en minúsculas, solo es visual, es decir no cambia su valor original
+**/
+string tolowerStr(string str)
+{
+    for (int x = 0; x < str.length(); x++)
+        str[x] = tolower(str[x]);
+    return str;
+}
 
+/**
+Impide la entrada de un usuario repetido en la base de datos
+parametros:
+dataUser: es el dato que vamos a contrar que no se repita (cédula)
+**/
+int userRepeat(string dataUser)
+{
+    for (auto &&user : lstUsuario)
+    {
+        string data(user.identificationCard); // convertimos CHAR TO STRING
+        if (tolowerStr(data) == tolowerStr(dataUser))
+        {
+            setColor(0, 12);
+            cout << "WARNING! Usuario '" << user.identificationCard << "' ya se encuentra registrado" << endl;
+            setColor(0, 15);
+            return 0;
+        }
+    }
+    return -1;
+}
+
+/**
+Convierte la primera letra de cada palabra a mayúscula y guarda los cambios realizados, es decir, se modifica su valor original
+parametros:
+str: referencia un valor String que se quiere hacer la modificación.
+**/
+string toCapitalUpper(string &str)
+{
+    for (int x = 0; x < str.length(); x++)
+        str[x] = (x == 0 || str[x - 1] == ' ') ? toupper(str[x]) : tolower(str[x]);
+    return str;
+}
+
+/**
+Devuelve un valor  entero positivo
+parametros:
+etiqueta: texto a mostrar
+valor: referencia a un valor entero
+**/
+void getNumber(string etiqueta, int &valor)
+{
+    do
+    {
+        cout << etiqueta;
+        cin >> valor;
+        cin.clear();
+        cin.ignore();
+        fflush(stdin);
+        if (valor < 0)
+        {
+            setColor(0, LRED);
+            cout << "WARNING! Valor no valido. \n";
+            setColor(0, WHITE);
+        }
+    } while (valor < 0);
+}
+
+/**
+Devuelve un valor decimal positivo
+parametros:
+etiqueta: texto a mostrar
+valor: referencia a un valor float
+**/
+void getNumber(string etiqueta, float &valor)
+{
+    do
+    {
+        cout << etiqueta;
+        cin >> valor;
+        cin.clear();
+        cin.ignore();
+        fflush(stdin);
+        if (valor < 0)
+        {
+            setColor(0, LRED);
+            cout << "WARNING! Valor no valido. \n";
+            setColor(0, WHITE);
+        }
+    } while (valor < 0);
+}
+
+/**
+getString para esta app, es decir, limpie espacios y tenga capitalUpper
+Parametros:
+etiqueta: leyenda a imprimir
+valor: variable en la que va a guardar el dato
+**/
+string getString(string etiqueta, string &valor)
+{
+    do
+    {
+        fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta aL siguiente valor
+        cout << etiqueta;
+        getline(cin, valor);
+        trim(valor);
+        setColor(0, LRED);
+        if (valor.length() == 0)
+            cout << "WARNING! No es posible dejar campos sin llenar :( \n";
+        setColor(0, WHITE);
+    } while (valor.length() == 0);
+    toCapitalUpper(valor);
+    return valor;
+}
+
+/**
+Transforma todas las letras de un string a mayúsculas, solo es visual, es decir, no guarda la modificación realiza.
+Parametros:
+str: valor string del texto que se requiere convertir en mayúsculas
+**/
+string toUpperString(string str)
+{
+    for (int i = 0; i < str.length(); i++)
+        str[i] = toupper(str[i]);
+    return str;
+}
+
+/**
+Carga todos los datos de los usuarios desde un archivo de tipo DAT (binario)
+**/
 void loadUserBinary()
 {
     ifstream rf(PathdataBinary, ios::in | ios::binary);
@@ -48,6 +174,9 @@ void loadUserBinary()
     rf.close();
 }
 
+/**
+Guarda los datos de los usuarios en un archivo de tipo DAT (binario)
+**/
 void writeUserBinary()
 {
     ofstream f(PathdataBinary, ios::out | ios_base::binary);
@@ -64,6 +193,9 @@ void writeUserBinary()
     setColor(0, 8);
 }
 
+/**
+Cargar los usuarios desde un archivo de tipo txt
+**/
 void loadUser()
 {
     ifstream data;
@@ -95,7 +227,9 @@ void loadUser()
     lstUsuario.pop_back();
 }
 
-// BUSCA POSITION LIBRE PARA CREAR NUEVO USUARIO
+/**
+Buscar una posición libre para introducir a un nuevo usuario en el vector lstUsuario
+**/
 void searchPositionFree()
 {
     for (int i = 0; i < 100; i++)
@@ -106,12 +240,15 @@ void searchPositionFree()
         }
 }
 
-// CREAR NUEVO USUARIO
+/**
+Crea un nuevo usuario, pide todos los datos nombre, apellidos, contraseña... y lo agrega en la base de datos.
+**/
 void createNewUser()
 {
     int opcion;
     int ID_temportal;
     string userName_temporal;
+    string userLastName_temporal;
     string password_temporal;
     string email_temporal;
     string country_temporal;
@@ -120,52 +257,43 @@ void createNewUser()
     string identificationCard_temporal;
 
 crearUsuarioGoto:
-    system("cls");
     HEADER();
     cout << " Inicio / Crear usuario\n";
-    // GUARDAMOS EL NOMBRE
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta a contrasenia
-    cout << "\n COMPLETE LOS SIGUIENTES CAMPOS - COMPLETE THE FOLLOWING FIELDS\n";
-    cout << "\n Nombre - Name:\t\t\t";
-    getline(cin, userName_temporal);
-    trim(userName_temporal);
-    // if (userName_temporal.length() == 0)
+    // GUARDAMOS NOMBRES
+    cout << "\n COMPLETE LOS SIGUIENTES CAMPOS - COMPLETE THE FOLLOWING FIELDS\n\n";
+    getString(" Nombres - Names:\t\t", userName_temporal);
+    // GUARDAMOS  APELLIDOS
+    getString(" Apellidos - LastNames:\t\t", userLastName_temporal);
     // GUARDAMOS LA CONSTRASEÑA
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a contraseña, salta a email
-    cout << " Contrasena - Password:\t\t";
-    getline(cin, password_temporal);
-    trim(password_temporal);
+    do
+    {
+        fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta aL siguiente valor
+        cout << " Contrasena - Password:\t\t";
+        getline(cin, password_temporal);
+        setColor(0, LRED);
+        if (password_temporal.length() == 0)
+            cout << "WARNING! No es posible dejar campos sin llenar :( \n";
+        setColor(0, WHITE);
+    } while (password_temporal.length() == 0);
     // GUARDAMOS EMAIL
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a email, salta a country
-    cout << " Correo - Email:\t\t";
-    getline(cin, email_temporal);
-    trim(email_temporal);
+    getString(" Correo - Email:\t\t", email_temporal);
     // GUARDAMOS PAIS
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a country, salta a city
-    cout << " Pais - Country:\t\t";
-    getline(cin, country_temporal);
-    trim(country_temporal);
+    getString(" Pais - Country:\t\t", country_temporal);
     // GUARDAMOS CIUDAD
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a city, salta a phoneNumber
-    cout << " Ciudad - City:\t\t\t";
-    getline(cin, city_temporal);
-    trim(city_temporal);
+    getString(" Ciudad - City:\t\t\t", city_temporal);
     // GUARDAMOS TELEFONO
-    fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a phoneNumber, salta a IdentificationCard
-    cout << " Telefono - Phone number:\t";
-    getline(cin, phoneNumber_temporal);
-    trim(phoneNumber_temporal);
+    getString(" Telefono - Phone number:\t", phoneNumber_temporal);
     // GUARDAMOS IDENTIFICACION
-    fflush(stdin); // LIMPIA EL BUFFER - RAM
-    cout << " Pasaporte - Passport:\t\t";
-    getline(cin, identificationCard_temporal);
-    trim(identificationCard_temporal);
-    fflush(stdin); // LIMPIA EL BUFFER - RAM
+    getString(" Pasaporte - Passport:\t\t", identificationCard_temporal);
 
     if (userRepeat(identificationCard_temporal) == 0)
         goto crearUsuarioGoto; // Volver a iniciar sesion
 
-    // ASIGNAR UN ID UNICO
+    /**
+    TENER ID UNICO
+    d  (a   a)  a→ c  →→→  d (a != c) → unico
+    d  (a   a)  a→ d  →→→  d (a != d) → unico  PERO  d == d
+    **/
     int ID_Unico = rand() % (maxID - minID + 1) + minID; // ID de 6 cifras
     for (int i = 0; i < lstUsuario.size(); i++)          // BUSCAR TODOS LOS ID - aseguramos todos los anteriores ID son !=
         if (ID_Unico == lstUsuario[i].ID)
@@ -177,9 +305,6 @@ crearUsuarioGoto:
         }
 
     ID_temportal = ID_Unico;
-    /*TENER ID UNICO*/
-    // d  (a   a)  a→ c  →→→  d (a != c) → unico
-    // d  (a   a)  a→ d  →→→  d (a != d) → unico  PERO  d == d
 
     cout << "\n\n CONFIRMACION DE REGISTRO DE CUENTA \n\n"
             " 1. Confirmar \n"
@@ -193,6 +318,8 @@ crearUsuarioGoto:
         user.ID = ID_temportal;
         for (int i = 0; i < userName_temporal.length(); i++)
             user.userName[i] += userName_temporal[i];
+        for (int i = 0; i < userLastName_temporal.length(); i++)
+            user.userLastName[i] += userLastName_temporal[i];
         for (int i = 0; i < password_temporal.length(); i++)
             user.password[i] += password_temporal[i];
         for (int i = 0; i < email_temporal.length(); i++)
@@ -205,14 +332,13 @@ crearUsuarioGoto:
             user.phoneNumber[i] = phoneNumber_temporal[i];
         for (int i = 0; i < 10; i++)
             user.identificationCard[i] = identificationCard_temporal[i];
+        user.cashTotal = 0;
         lstUsuario.push_back(user); // Guadar en el vector
 
-        system("cls");
         HEADER();
-        cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t VALIDANDO DATOS...\n\n";
-        // showBarrRotateCenter(30);
+        cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t VALIDANDO DATOS...\n\n";
+        showBarrRotateCenter(30);
 
-        system("cls");
         HEADER();
         // cout<<"\n soy la posicion %d y estoy llena", positionUserFree); // revisar la posición vacia
         cout << " Inicio / Crear Usuario / Resumen\n";
@@ -227,42 +353,23 @@ crearUsuarioGoto:
 
         writeUserBinary();
         system("pause");
-        // // GUARDAR EN FICHEROS
-        // ofstream dataNew;
-        // dataNew.open(PathdataNEW, ios::out); // abrir fichero modo escritura
-
-        // if (dataNew.fail())
-        // {
-        //     cout << "No se pudo abrir el archivo\n";
-        //     system("PAUSE");
-        //     exit(1);
-        // }
-        // for (auto &&user : lstUsuario)
-        // {
-        //     dataNew << user.ID << endl;
-        //     dataNew << user.userName << endl;
-        //     dataNew << user.password << endl;
-        //     dataNew << user.email << endl;
-        //     dataNew << user.county << endl;
-        //     dataNew << user.city << endl;
-        //     dataNew << user.phoneNumber << endl;
-        //     dataNew << user.identificationCard << endl;
-        //     dataNew << user.cash << endl;
-        // }
         // dataNew.close(); // CERRAR EL FICHERO
         // remove(Pathdata);
-        // cout << "\nEl nuevo tamano del vector es: " << lstUsuario.size();
         opcion = 20; // SALIR AL MENU PRINCIPAL
         // rename(PathdataNEW, Pathdata);
     }
 }
 
+/**
+Muestra datos generales de todos los usuarios
+**/
 void showUser()
 {
     for (auto &&user : lstUsuario)
     {
         cout << "ID: \t\t\t" << user.ID << endl
-             << "Usuario: \t\t" << user.userName << endl
+             << "Nombre:  \t\t" << user.userName << endl
+             << "Apellido: \t\t" << user.userLastName << endl
              << "contrasena : \t\t" << user.password << endl
              << "email : \t\t" << user.email << endl
              << "Pais : \t\t\t" << user.county << endl
@@ -285,6 +392,13 @@ void showUser()
     }
 }
 
+/**
+Colocar los datos al momento de realizar una transacción: fecha, hora, dinero total, tipo de trasacción
+parametros:
+userPosition: valor int de la posición del usuario que se va colocar el historial
+cash_depo_reti_transfer: valor float del dinero de la transacción
+typeTrasaction: valor int del tipo de transacción (DEPOSITO, RETIRO, TRANSFERENCIA)
+**/
 void putHistory(int userPosition, float cash_depo_reti_transfer, int typeTransaction)
 {
     /* fecha/hora actual basado en el sistema actual */
@@ -294,7 +408,6 @@ void putHistory(int userPosition, float cash_depo_reti_transfer, int typeTransac
 
     int year = 1900 + time->tm_year;
 
-    // cout << time->tm_mday << " / " << mes[time->tm_mon] << " / " << year << endl;
     switch (typeTransaction)
     {
     case DEPOSITO:
@@ -376,15 +489,29 @@ void putHistory(int userPosition, float cash_depo_reti_transfer, int typeTransac
     }
 }
 
+/**
+Submenu del usuario, opciones deposito, retiro, transferencia...
+parametros:
+opcion: referencia a memoria int donde se va a guardar la selección
+userPosition: Posición del usuario para mostrar el nombre del usuario
+**/
 int subMenu(int &opcion, int userPosition)
 {
-    system("cls");
     HEADER();
     showUser();
+    string nombreUsuario(lstUsuario[userPosition].userName);
     cout << " Inicio / Operaciones\n";
-    cout << "\n\t\t\t\tW E L C O M E   B A C K, " << lstUsuario[userPosition].userName << "\n ";
+    cout << "\n\t\t\t\tW E L C O M E   B A C K, ";
+
+    for (int i = 0; i < nombreUsuario.length(); i++)
+        if (nombreUsuario[i] != '\0')
+            cout << toUpperString(nombreUsuario)[i] << " ";
+        else
+            break;
+    cout << "\n ";
+
     cout
-        << "\n Lista de opciones\n\n";
+        << "\n\t Lista de opciones\n\n";
     cout << "\t " << DEPOSITO << ". Depositar\n";
     cout << "\t " << RETIRO << ". Retirar\n";
     cout << "\t " << TRANSFERENCIA << ". Transferir\n";
@@ -393,18 +520,24 @@ int subMenu(int &opcion, int userPosition)
     cout << "\n\n\t Ingrese una opcion: ";
     // scanf("%s", &opcion);
     cin >> opcion;
+    fflush(stdin);
     // int Option = opcion - '0'; // CHAR TO INT
     // int Option = atoi(opcion); // CHAR TO INT - DON'T WORK
 
     return opcion;
 }
 
+/**
+Muestra el historial del usuario
+parametros:
+userPosition: valor int de la posición del usuario que se va a mostrar el historial
+typeTrasaction: valor int del tipo de trasacción (DEPOSITO, RETIRO, TRANSFERENCIA, TODOS=10)
+**/
 void showHistory(int userPosition, int typeTransaction)
 {
     switch (typeTransaction)
     {
     case DEPOSITO:
-        system("cls");
         HEADER();
         cout << " Usuario / Inicio / Historial / Deposito\n\n";
         cout << " Dinero Total: \t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal << endl
@@ -425,7 +558,6 @@ void showHistory(int userPosition, int typeTransaction)
         system("pause");
         break;
     case RETIRO:
-        system("cls");
         HEADER();
         cout << " Usuario / Inicio / Historial / Retiro\n\n";
         cout << " Dinero Total: \t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal << endl
@@ -465,7 +597,6 @@ void showHistory(int userPosition, int typeTransaction)
         system("pause");
         break;
     case 10:
-        system("cls");
         HEADER();
         cout << " Usuario / Inicio / Historial / General\n\n";
         cout << " Dinero Total: \t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal << endl
@@ -503,29 +634,13 @@ void showHistory(int userPosition, int typeTransaction)
         break;
     }
 }
-string tolowerStr(string str)
-{
-    for (int x = 0; x < str.length(); x++)
-        str[x] = tolower(str[x]);
-    return str;
-}
-int userRepeat(string dataUser)
-{
-    for (auto &&user : lstUsuario)
-    {
-        string data(user.identificationCard); // convertimos CHAR TO STRING
-        if (tolowerStr(data) == tolowerStr(dataUser))
-        {
-            setColor(0, 12);
-            cout << "WARNING! Usuario '" << user.identificationCard << "' ya se encuentra registrado" << endl;
-            setColor(0, 15);
-            return 0;
-        }
-    }
-    return -1;
-}
 
-int BuscarID(int ID)
+/**
+Devuelve un indice de posición del usuario en el vector.
+parametros:
+ID: valor int del Id a buscar
+**/
+int searchPositionId(int ID)
 {
     for (int i = 0; i < lstUsuario.size(); i++)
         if (ID == lstUsuario[i].ID)
@@ -548,15 +663,17 @@ int main()
 
     // loadUser();
     loadUserBinary();
-    srand(time(NULL)); // Semilla numero aleatorio
+    // srand(time(NULL)); // Semilla numero aleatorio
 
-    dia_semana.push_back("Domingo");
-    dia_semana.push_back("Lunes");
-    dia_semana.push_back("Martes");
-    dia_semana.push_back("Miercoles");
-    dia_semana.push_back("Jueves");
-    dia_semana.push_back("Viernes");
-    dia_semana.push_back("Sabado");
+    /**
+        dia_semana.push_back("Domingo");
+        dia_semana.push_back("Lunes");
+        dia_semana.push_back("Martes");
+        dia_semana.push_back("Miercoles");
+        dia_semana.push_back("Jueves");
+        dia_semana.push_back("Viernes");
+        dia_semana.push_back("Sabado");
+    **/
 
     mes.push_back("01");
     mes.push_back("02");
@@ -573,19 +690,16 @@ int main()
 
     // setColor(3, 4);
     // system("color 10");
-    inicioAnimacion();
+    // inicioAnimacion();
     do
     {
-        system("cls");
         inicio();
-        cin >> opcion;
-        // scanf("%c", &opcion);
+        // cin >> opcion;
+        getNumber("", opcion);
 
         if (opcion == INICIAR_SESION) // INCIAR SESION
         {
         volverIniciar:
-            system("cls");
-
             int buscarID;
             char buscarpass[50];
             int result;
@@ -593,16 +707,14 @@ int main()
             bool flagSessionSucces = false;
             flagSessionSucces = false; // reiniciar para buscar en cada iteracion
 
-            system("cls");
             HEADER();
             cout << " Inicio / Iniciar Sesion\n";
-            cout << "\n\n\n\n\n\n\n\t\t\t\t\t USERNAME:     ";
-            cin >> buscarID;
-            // scanf("%i", &buscarID);
+            getNumber("\n\n\n\n\n\n\n\t\t\t\t\t USERNAME:     ", buscarID);
+            // cout << "\n\n\n\n\n\n\n\t\t\t\t\t USERNAME:     ";
+            // cin >> buscarID;
             cout << "\n\n\t\t\t\t\t PASSWORD:     ";
             fflush(stdin);
             cin >> buscarpass;
-            // scanf("%s", &buscarpass);
             if (buscarID != 0)
                 for (int i = 0; i < lstUsuario.size(); i++)
                     if (buscarID == lstUsuario[i].ID)
@@ -612,9 +724,6 @@ int main()
                         // si son iguales devuelve 0
                         // si no son iguales no devuelve 0
 
-                        // result = strcmp(lstUsuario[i].password, buscarpass);
-
-                        // cout << "....'" << lstUsuario[i].password << "'....'" << buscarpass << "'" << endl;
                         // if (lstUsuario[i].password == buscarpass) // no funciona
                         if (strcmp(lstUsuario[i].password, buscarpass) == 0)
                             flagSessionSucces = true;
@@ -623,9 +732,10 @@ int main()
 
             if (flagSessionSucces == false)
             {
-                cout << "\n\n\n\n\n\t\t\t\t\t Usuario o Contrasenia incorrecta ";
-                cout << "\n\t\t\t\t\t Presione 0 para salir al menu principal ";
-                cin >> opcion;
+                // cout << "\n\n\n\n\n\t\t\t\t\t Usuario o Contrasenia incorrecta\n\t\t\t\t\t Presione 0 para salir al menu principal ";
+                // cout << "";
+                getNumber("\n\n\n\n\n\t\t\t\t\t Usuario o Contrasenia incorrecta\n\t\t\t\t\t Presione 0 para salir al menu principal ", opcion);
+                // cin >> opcion;
                 if (opcion == 0)
                     opcion = 20;
                 else
@@ -634,11 +744,9 @@ int main()
 
             if (flagSessionSucces == true) // SI ES QUE INICIA SESSION MOSTRAR OPERACIONES
             {
-                system("cls");
                 HEADER();
                 cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t Iniciando Sesion...\n\n";
                 showBarrRotateCenter(5);
-                system("cls");
                 do
                 {
                     float deposito_retiro_transferencia;
@@ -646,85 +754,69 @@ int main()
                     switch (subMenu(opcion, userPosition))
                     {
                     case DEPOSITO:
-                        do
-                        {
-                            system("cls");
-                            HEADER();
-                            cout << " Usuario / Inicio / Deposito\n";
-                            cout << "\n Dinero a depositar:\t$ ";
-                            cin >> deposito_retiro_transferencia;
-                            if (deposito_retiro_transferencia == 0)
-                            {
-                                cout << "\n Presione 0 para salir";
-                                cin >> opcion;
-                                if (opcion == 0)
-                                {
-                                    opcion = 20; // Salir al menu
-                                    break;
-                                }
-                            }
-                        } while (deposito_retiro_transferencia < 0);
 
-                        // scanf("%f", &deposito);
-                        system("cls");
-                        HEADER();
-                        cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t Terminamos en un momento...\n\n";
-                        showBarrRotateCenter(5);
-                        system("cls");
                         HEADER();
                         cout << " Usuario / Inicio / Deposito\n";
-                        cout << "\n\n Saldo anterior:\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
-                        putHistory(userPosition, deposito_retiro_transferencia, DEPOSITO);
-                        lstUsuario[userPosition].cashTotal = lstUsuario[userPosition].cashTotal + deposito_retiro_transferencia;
-                        cout << "\n Saldo actual:\t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
+                        getNumber("\n Dinero a depositar:\t$ ", deposito_retiro_transferencia);
+                        // cout << "\n Dinero a depositar:\t$ ";
+                        // cin >> deposito_retiro_transferencia;
+                        if (deposito_retiro_transferencia != 0)
+                        {
+                            HEADER();
+                            cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t Terminamos en un momento...\n\n";
+                            showBarrRotateCenter(5);
+                            HEADER();
+                            cout << " Usuario / Inicio / Deposito\n";
+                            cout << "\n\n Saldo anterior:\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
+                            putHistory(userPosition, deposito_retiro_transferencia, DEPOSITO);
+                            lstUsuario[userPosition].cashTotal = lstUsuario[userPosition].cashTotal + deposito_retiro_transferencia;
+                            cout << "\n Saldo actual:\t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
 
-                        cout << "\n\n\n\n\n\t\t\t El deposito se realizo correctamente.\n";
-                        // showUser();
-                        showHistory(userPosition, DEPOSITO);
-                        writeUserBinary();
-
+                            cout << "\n\n\n\n\n\t\t\t El deposito se realizo correctamente.\n";
+                            // showUser();
+                            showHistory(userPosition, DEPOSITO);
+                            writeUserBinary();
+                        }
                         // cout << "\nEl nuevo tamano del vector es: " << lstUsuario.size();
                         opcion = 20; // SALIR AL MENU PRINCIPAL
                         break;
                     case TRANSFERENCIA:
-                        system("cls");
                         HEADER();
                         cout << " Usuario / Inicio / Transferencias\n\n";
-                        cout << " Monto a transferir: \t\t$ ";
-                        cin >> deposito_retiro_transferencia;
-                        cout << " Cuenta del destinatario: \t";
-                        cin >> destinatarioID;
-                        if (BuscarID(destinatarioID) == -1)
+                        getNumber(" Monto a transferir: \t\t$ ", deposito_retiro_transferencia);
+                        // cout << " Monto a transferir: \t\t$ ";
+                        // cin >> deposito_retiro_transferencia;
+                        getNumber(" Cuenta del destinatario: \t", destinatarioID);
+                        // cout << " Cuenta del destinatario: \t";
+                        // cin >> destinatarioID;
+                        if (searchPositionId(destinatarioID) == -1)
                         {
                             cout << "\n\t\t\t\tEL USUARIO NO EXISTE\n\t\t\t\tIntente nuevamente\n\t\t\t";
                             system("pause");
                         }
                         else
                         {
-                            if (lstUsuario[userPosition].cashTotal < deposito_retiro_transferencia)
-                            {
-                                cout << "\n\n\t\t\tNo se ha podido realizar la transferencia, fondos insuficientes\n\t\t\t\t ";
-                                system("pause");
-                            }
-                            else
+                            // if (BuscarID(destinatarioID) != lstUsuario[userPosition].ID)
+                            //     cout << "   Buscar Id es " << destinatarioID << " y esta en: " << BuscarID(destinatarioID) << endl
+                            //          << "   Id actual es " << lstUsuario[userPosition].ID << " y esta en " << userPosition << endl;
+                            if (deposito_retiro_transferencia != 0 && lstUsuario[userPosition].cashTotal >= deposito_retiro_transferencia && searchPositionId(destinatarioID) != userPosition)
                             {
                                 cout << "\n\n Esta a punto de transferir $" << deposito_retiro_transferencia << ", a este numero de cuenta " << destinatarioID << endl
                                      << endl;
-
-                                cout << " Confirmar la transferencia\n\n 1: Si \n 2: No" << endl
-                                     << endl;
-                                cout << " Opcion: ";
-                                cin >> opcion;
+                                getNumber(" Confirmar la transferencia\n\n 1: Si \n 2: No\n\n Opcion: ", opcion);
+                                // cout << " Confirmar la transferencia\n\n 1: Si \n 2: No" << endl
+                                //      << endl;
+                                // cout << " Opcion: ";
+                                // cin >> opcion;
                                 if (opcion == 1)
                                 {
                                     cout << "\n\n\t\t\t\t\t\t Terminamos en un momento...\n\n";
                                     showBarrRotateCenter(5);
 
                                     putHistory(userPosition, deposito_retiro_transferencia, TRANSFERENCIA);
-                                    putHistory(BuscarID(destinatarioID), deposito_retiro_transferencia, DEPOSITO);
+                                    putHistory(searchPositionId(destinatarioID), deposito_retiro_transferencia, DEPOSITO);
                                     lstUsuario[userPosition].cashTotal = lstUsuario[userPosition].cashTotal - deposito_retiro_transferencia;
-                                    lstUsuario[BuscarID(destinatarioID)].cashTotal = lstUsuario[BuscarID(destinatarioID)].cashTotal + deposito_retiro_transferencia;
-                                    system("cls");
+                                    lstUsuario[searchPositionId(destinatarioID)].cashTotal = lstUsuario[searchPositionId(destinatarioID)].cashTotal + deposito_retiro_transferencia;
                                     HEADER();
 
                                     cout << "\n TRANFERENCIA EXITOSA!\n\n"
@@ -740,62 +832,57 @@ int main()
                                 {
                                     cout << "\t\t\tDe acuerdo, usted sera redireccionado al menu principal\n\t\t\t\t";
                                     system("pause");
-                                    opcion = 20; // salir menu principal
+                                }
+                            }
+                            else
+                            {
+                                if (searchPositionId(destinatarioID) == userPosition)
+                                {
+                                    cout << "\n\t\t\tNO ES POSIBLE TRANSFERIR AL MISMO USUARIO\n\t\t\t\tIntente nuevamente\n\n\t\t\t";
+                                    system("pause");
+                                }
+                                if (lstUsuario[userPosition].cashTotal < deposito_retiro_transferencia)
+                                {
+                                    cout << "\n\n\t\t\t\t\tFondos insuficientes\n\t\t\t\t";
+                                    system("pause");
                                 }
                             }
                         }
+                        // opcion = 20; // salir menu principal
                         break;
                     case RETIRO:
-                        do
+                        HEADER();
+                        cout << " Usuario / Inicio / Retirar\n";
+                        getNumber("\n Dinero a retirar:\t$ ", deposito_retiro_transferencia);
+                        // cout << "\n Dinero a retirar:\t$ ";
+                        // cin >> deposito_retiro_transferencia;
+                        if (lstUsuario[userPosition].cashTotal < deposito_retiro_transferencia)
                         {
-                            system("cls");
+                            cout << "\n\n\t\t\t\t\tFondos insuficientes\n\t\t\t\t";
+                            system("pause");
+                        }
+                        if (deposito_retiro_transferencia != 0 && lstUsuario[userPosition].cashTotal >= deposito_retiro_transferencia)
+                        {
                             HEADER();
-                            cout << " Usuario / Inicio / Retirar\n";
-                            cout << "\n Dinero a retirar:\t$ ";
-                            cin >> deposito_retiro_transferencia;
-                            if (deposito_retiro_transferencia == 0)
-                            {
-                                cout << "\n Presione 0 para salir";
-                                cin >> opcion;
-                                if (opcion == 0)
-                                {
-                                    opcion = 20; // Salir al menu
-                                    break;
-                                }
-                            }
-                            if (lstUsuario[userPosition].cashTotal < deposito_retiro_transferencia)
-                            {
-                                cout << "\n\n\t\t\t\t\tFondos insuficientes\n\t\t\t\t";
-                                system("pause");
-                            }
+                            cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t Terminamos en un momento...\n\n";
+                            showBarrRotateCenter(5);
+                            HEADER();
+                            cout << " Usuario / Inicio / Retiro\n";
+                            cout << "\n\n Saldo anterior:\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
+                            putHistory(userPosition, deposito_retiro_transferencia, RETIRO);
+                            lstUsuario[userPosition].cashTotal -= deposito_retiro_transferencia;
+                            cout << "\n Saldo actual:\t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
 
-                        } while (deposito_retiro_transferencia < 0 || lstUsuario[userPosition].cashTotal < deposito_retiro_transferencia);
-
-                        // scanf("%f", &retiro);
-                        system("cls");
-                        HEADER();
-                        cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t Terminamos en un momento...\n\n";
-                        showBarrRotateCenter(5);
-                        system("cls");
-                        HEADER();
-                        cout << " Usuario / Inicio / Retiro\n";
-                        cout << "\n\n Saldo anterior:\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
-                        putHistory(userPosition, deposito_retiro_transferencia, RETIRO);
-                        lstUsuario[userPosition].cashTotal -= deposito_retiro_transferencia;
-                        cout << "\n Saldo actual:\t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal;
-
-                        cout << "\n\n\n\n\n\t\t\t El deposito se realizo correctamente.\n";
-                        // showUser();
-                        showHistory(userPosition, RETIRO);
-                        writeUserBinary();
-
+                            cout << "\n\n\n\n\n\t\t\t El deposito se realizo correctamente.\n";
+                            showHistory(userPosition, RETIRO);
+                            writeUserBinary();
+                        }
                         // cout << "\nEl nuevo tamano del vector es: " << lstUsuario.size();
                         opcion = 20; // SALIR AL MENU PRINCIPAL
                         break;
                     case ESTADO_CUENTA:
                         // do
                         // {
-                        // system("cls");
                         //     HEADER();
                         //     cout << " Usuario / Inicio / Estado de cuenta\n";
                         //     cout << " 1. Editar Usuario";
@@ -834,7 +921,6 @@ int main()
         }
         if (opcion == CREAR_CUENTA) // CREAR CUENTA
         {
-            system("cls");
             HEADER();
             cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t CARGANDO REGISTRO... \n\n";
             showBarrRotateCenter(3);
@@ -844,6 +930,5 @@ int main()
     } while (opcion != SALIR);
 
     writeUserBinary();
-
     return 1;
 }

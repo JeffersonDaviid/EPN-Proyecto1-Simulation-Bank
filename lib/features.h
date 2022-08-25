@@ -51,6 +51,7 @@ char botonEntrar[25] = "Presione para continuar ";
 
 void inicioAnimacion()
 {
+    system("cls");
     printf("\n\n\n\n\n\n\n\n\n\n\n");
     for (int i = 0; i < 135; i++)
     {
@@ -104,6 +105,7 @@ void inicioAnimacion()
 
 void inicio()
 {
+    system("cls");
     printf("\n\n\n\n\n\n\n\n\n\n\n");
     for (int i = 0; i < 135; i++)
         printf("%c", lineas[i]);
@@ -146,6 +148,7 @@ void setColor(int Background, int Text)
 // ENCABEZADO del simulador
 void HEADER()
 {
+    system("cls");
     setColor(14, 0);
     printf(" ------------------------------------------------------------------------------------------------------------------------------------\n");
     setColor(1, 15);
@@ -178,6 +181,7 @@ void showBarrRotateCenter(int delay)
     }
     fflush(stdout); // Limpia la memoria
     printf("\n");
+    system("cls");
 }
 
 enum Colors
