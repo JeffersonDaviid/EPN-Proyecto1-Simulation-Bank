@@ -363,7 +363,7 @@ crearUsuarioGoto:
 /**
 Muestra datos generales de todos los usuarios
 **/
-void showUser()
+void showAllUser()
 {
     for (auto &&user : lstUsuario)
     {
@@ -390,6 +390,26 @@ void showUser()
 
         cout << endl;
     }
+}
+
+/**
+Muestra datos generales de un usuarios
+parametros:
+userPosition: recibe un valor entero de la posición del usuario
+**/
+void showUser(int userPosition)
+{
+    cout << "ID: \t\t\t" << lstUsuario[userPosition].ID << endl
+         << "Nombre:  \t\t" << lstUsuario[userPosition].userName << endl
+         << "Apellido: \t\t" << lstUsuario[userPosition].userLastName << endl
+         << "contrasena : \t\t" << lstUsuario[userPosition].password << endl
+         << "email : \t\t" << lstUsuario[userPosition].email << endl
+         << "Pais : \t\t\t" << lstUsuario[userPosition].county << endl
+         << "Ciudad : \t\t" << lstUsuario[userPosition].city << endl
+         << "Numero de telefono : \t" << lstUsuario[userPosition].phoneNumber << endl
+         << "Cedula : \t\t" << lstUsuario[userPosition].identificationCard << endl
+         << "Dinero Total: \t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal << endl;
+    cout << endl;
 }
 
 /**
@@ -498,7 +518,7 @@ userPosition: Posición del usuario para mostrar el nombre del usuario
 int subMenu(int &opcion, int userPosition)
 {
     HEADER();
-    showUser();
+    showAllUser();
     string nombreUsuario(lstUsuario[userPosition].userName);
     cout << " Inicio / Operaciones\n";
     cout << "\n\t\t\t\tW E L C O M E   B A C K, ";
@@ -515,6 +535,7 @@ int subMenu(int &opcion, int userPosition)
     cout << "\t " << DEPOSITO << ". Depositar\n";
     cout << "\t " << RETIRO << ". Retirar\n";
     cout << "\t " << TRANSFERENCIA << ". Transferir\n";
+    cout << "\t " << HISTORIAL << ". Historial\n";
     cout << "\t " << SALIR << ". Salir";
 
     cout << "\n\n\t Ingrese una opcion: ";
@@ -596,7 +617,7 @@ void showHistory(int userPosition, int typeTransaction)
         cout << "\n\n\t\t\t\t";
         system("pause");
         break;
-    case 10:
+    case HISTORIAL:
         HEADER();
         cout << " Usuario / Inicio / Historial / General\n\n";
         cout << " Dinero Total: \t\t$ " << fixed << setprecision(2) << lstUsuario[userPosition].cashTotal << endl
@@ -647,6 +668,63 @@ int searchPositionId(int ID)
             return i;
     return -1;
 }
+
+void editUser(int userPosition)
+{
+    string password_temporal;
+    string email_temporal;
+    string phoneNumber_temporal;
+    char buscarpass[50];
+    cout << " Ingrese su contrasena: \t";
+    cin >> buscarpass;
+    if (strcmp(lstUsuario[userPosition].password, buscarpass) == 0)
+    {
+        HEADER();
+        cout << " Usuario / Inicio / Cuenta / Actulizar datos\n";
+
+        cout << " Ingrese el apartado que desea editar\n";
+        cout << " 1. contrasena : \t\t" << lstUsuario[userPosition].password << endl
+             << " 2. email : \t\t" << lstUsuario[userPosition].email << endl
+             << " 3. Numero de telefono : \t" << lstUsuario[userPosition].phoneNumber << endl
+             << endl;
+
+        getNumber(" opcion: ", opcion);
+        switch (opcion)
+        {
+        case 1:
+            do
+            {
+                fflush(stdin); // LIMPIA EL BUFFER - si no, no permite ingresar a nombre, salta aL siguiente valor
+                cout << " Ingrese nueva contrasena\t\t";
+                getline(cin, password_temporal);
+                setColor(0, LRED);
+                if (password_temporal.length() == 0)
+                    cout << "WARNING! No es posible dejar campos sin llenar :( \n";
+                setColor(0, WHITE);
+            } while (password_temporal.length() == 0);
+            getNumber(" \tConfirmacion de actulizacion de contraseña\n\t1. Aceptar\n\t0. Salid\n\tIngrese opcion: ", opcion);
+            if (opcion == 1)
+            {
+                // for (int i = 0; i < password_temporal.length(); i++)
+                //     lstUsuario[userPosition].password += password_temporal[i];
+
+                writeUserBinary();
+                cout << " \n\t Datos actulizados correctamente\n\t";
+                system("pause");
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+    else
+    {
+        cout << "\n\n\t\t\t Contrasena incorrecta, usted sera redirigido al menu principal\n\t\t";
+        system("PAUSE");
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rutina Principal
 int main()
@@ -880,19 +958,22 @@ int main()
                         // cout << "\nEl nuevo tamano del vector es: " << lstUsuario.size();
                         opcion = 20; // SALIR AL MENU PRINCIPAL
                         break;
-                    case ESTADO_CUENTA:
-                        // do
-                        // {
-                        //     HEADER();
-                        //     cout << " Usuario / Inicio / Estado de cuenta\n";
-                        //     cout << " 1. Editar Usuario";
-                        //     cout << " 2. ";
-
-                        // } while (opcion != 0 || opcion < 0);
-                        showHistory(userPosition, 10);
+                    case HISTORIAL:
+                        showHistory(userPosition, HISTORIAL);
                         cout << "\n\n\n\t\t\t\t";
                         break;
-                    case 5:
+                    case CUENTA:
+                        HEADER();
+                        showUser(userPosition);
+                        getNumber(" 1. Editar\n 0. Volver", opcion);
+                        if (opcion == 1)
+                        {
+                            editUser(userPosition);
+                        }
+
+                        cout << "\n\n\n\t\t\t\t";
+                        break;
+                    case 8:
                         for (auto &&user : lstUsuario[userPosition].historialUsuario)
                             if (lstUsuario[userPosition].cashTotal == 0 && user.year != 0 && user.typeTrasaction != 0)
                             {
@@ -908,7 +989,7 @@ int main()
                                 user.seconds = 0;
                             }
 
-                        showHistory(userPosition, 10);
+                        showHistory(userPosition, HISTORIAL);
                         cout << "\n\n\n\t\t\t\t";
                         break;
                     default:
